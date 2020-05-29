@@ -41,7 +41,6 @@ export default class MaterialTable extends React.Component {
         page: 0,
         pageSize: calculatedProps.options.pageSize,
         search: renderState.searchText,
-
         totalCount: 0
       },
       showAddRow: false,
@@ -54,7 +53,7 @@ export default class MaterialTable extends React.Component {
   componentDidMount() {
     this.setState({ ...this.dataManager.getRenderState(), width: this.tableContainerDiv.current.scrollWidth }, () => {
       if (this.isRemoteData()) {
-        this.onQueryChange(this.state.query);
+        this.onQueryChange({...this.state.query, page: ((this.props.options.initialPage) ? this.props.options.initialPage : this.state.query.page)});
       }
     });
   }
@@ -83,7 +82,7 @@ export default class MaterialTable extends React.Component {
 
     isInit && this.dataManager.changeOrder(defaultSortColumnIndex, defaultSortDirection);
     isInit && this.dataManager.changeSearchText(props.options.searchText || '');
-    isInit && this.dataManager.changeCurrentPage(props.options.initialPage ? props.options.initialPage : 0);
+    isInit && !this.isRemoteData() && this.dataManager.changeCurrentPage(props.options.initialPage ? props.options.initialPage : 0);
     (isInit || this.isRemoteData()) && this.dataManager.changePageSize(props.options.pageSize);
     this.dataManager.changePaging(props.options.paging);
     isInit && this.dataManager.changeParentFunc(props.parentChildData);
