@@ -23,7 +23,7 @@ export class MTableToolbar extends React.Component {
     this.state = {
       columnsButtonAnchorEl: null,
       exportButtonAnchorEl: null,
-      searchText: ''
+      searchText: props.searchText
     };
   }
 
@@ -273,6 +273,7 @@ MTableToolbar.propTypes = {
   dataManager: PropTypes.object.isRequired,
   onSearchChanged: PropTypes.func.isRequired,
   search: PropTypes.bool.isRequired,
+  searchText: PropTypes.string,
   searchFieldStyle: PropTypes.object,
   searchFieldVariant: PropTypes.string,
   selectedRows: PropTypes.array,
