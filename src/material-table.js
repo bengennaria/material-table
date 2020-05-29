@@ -38,7 +38,7 @@ export default class MaterialTable extends React.Component {
           })),
         orderBy: renderState.columns.find(a => a.tableData.id === renderState.orderBy),
         orderDirection: renderState.orderDirection,
-        page: calculatedProps.options.initialPage || 0,
+        page: 0,
         pageSize: calculatedProps.options.pageSize,
         search: renderState.searchText,
 
@@ -120,7 +120,7 @@ export default class MaterialTable extends React.Component {
     const currentPage = this.isRemoteData() ? this.state.query.page : this.state.currentPage;
     const pageSize = this.isRemoteData() ? this.state.query.pageSize : this.state.pageSize;
 
-    if (count <= pageSize * currentPage && (!this.isRemoteData() || !this.state.isLoading)) {
+    if (count <= pageSize * currentPage && currentPage !== 0) {
       this.onChangePage(null, Math.max(0, Math.ceil(count / pageSize) - 1));
     }
   }
@@ -531,7 +531,7 @@ export default class MaterialTable extends React.Component {
                 SelectProps={{
                   renderValue: value => <div style={{ padding: '0px 5px' }}>{value + ' ' + localization.labelRowsSelect + ' '}</div>
                 }}
-                page={this.isRemoteData() ? (Math.min(this.state.query.page, this.state.query.totalCount)) : currentPage}
+                page={this.isRemoteData() ? this.state.query.page : currentPage}
                 onChangePage={this.onChangePage}
                 onChangeRowsPerPage={this.onChangeRowsPerPage}
                 ActionsComponent={(subProps) => props.options.paginationType === 'normal' ?
@@ -665,7 +665,7 @@ export default class MaterialTable extends React.Component {
               exportCsv={props.options.exportCsv}
               getFieldValue={this.dataManager.getFieldValue}
               data={this.state.data}
-              renderData={this.isRemoteData() ? this.state.data : this.state.renderData}
+              renderData={this.state.renderData}
               search={props.options.search}
               showTitle={props.options.showTitle}
               showTextRowsSelected={props.options.showTextRowsSelected}
